@@ -12,7 +12,7 @@
 }
 \usage{
 
- ewkm(x, k, lambda=1, maxiter=100, delta=0.00001)
+ ewkm(x, k, lambda=1, maxiter=100, delta=0.00001, maxrestart=10)
 
 }
 \arguments{
@@ -26,6 +26,13 @@
   \item{maxiter}{maximum number of iterations.}
     
   \item{delta}{maximum change allowed between iterations for convergence.}
+
+  \item{maxrestart}{maximum number of restarts. Default is 10 so that we
+  stand a good chance of getting a full set of clusters. Normally, any
+  empty clusters that result are removed from the result, and so we may
+  obtain fewer than k clusters if we don't allow restarts (i.e.,
+  maxrestart=0). If < 0 then there is no limit on the number of restarts
+  and we are much more likely to get a full set of k clusters.}
 
 }
 \details{
@@ -61,6 +68,10 @@
   weights across the variables. Small lambda (e.g., < 1) lead to a more
   uneven distribution of weights, giving more discrimintation between
   features. Recommended values are between 1 and 3.
+
+  Alsways check the number of iterations, the number of restarts, and
+  the total number of iterations as they give a good indication of
+  whether the algorithm converged.
   
 }
 \value{
@@ -73,7 +84,19 @@
   weights: A matrix of weights recording the relative importance of each
   variable for each cluster.
 
-  iterations: The number of iterations before termination.
+  iterations: This reports on the number of iterations before
+  termination. Check this to see whether the maxiters was reached. If so
+  then the algroithm may not be converging,and thus the resulting
+  clustering may not be particularly good.
+
+  restarts: The number of times the clustering restarted because of a
+  disappearing cluster resulting from one or more k-means having no
+  observations associated with it. An number here greater than 0
+  indicates that the algorithm is not converging on a clustering for the
+  given k. It is recommended that k be reduced.
+
+  total.iterations: The total number of iterations over all restarts.
+
 }
 \references{
 

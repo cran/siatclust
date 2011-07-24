@@ -28,6 +28,9 @@
 #include <limits.h>
 #include <time.h>
 
+#include <Rmath.h>
+double unif_rand(void);
+
 // ***** Support functions *****
 
 // ----- Create the initial prototype (k centroids) -----
@@ -57,10 +60,8 @@ void initPrototypes(// Inputs ---------------------------------------------
 
   for (l = 0; l < *k; l++) random_obj_num[l] = -1;
 
-  // Randomly select k objects
+  // Randomly select k objects.
   
-  srand((unsigned) time(0)); // TODO gjw Integrate with R's set.seed.
-
   for (l = 0; l < *k; l++) 
   {
     flag = 1;
@@ -161,7 +162,7 @@ void updPartition(// Inputs
 
 // --- Update the prototypes -----
 
-void updPrototypes(// Inputs ---------------------------------------------
+int updPrototypes(// Inputs ---------------------------------------------
 		    double *x, 	// Numeric matrix as vector by col (nr*nc)
 		    int *nr, 		// Number of rows
 		    int *nc, 		// Number of columns
@@ -191,11 +192,19 @@ void updPrototypes(// Inputs ---------------------------------------------
       o_prototype[partition[i]][j] += x[j * (*nr) + i];
   }
 
+  int flag = 1;
   for (l = 0; l < *k; l++) 
+  {
+    if (no_clusters[l] == 0) 
+    {
+      flag = 0;
+      break;
+    }
     for (j = 0; j < *nc; j++) 
       o_prototype[l][j] /= no_clusters[l];
-  
+  }
   free(no_clusters);
+  return flag;
 }
 
 // ----- Calculate exp^{a}/sum(exp^{a}) -----
@@ -293,13 +302,16 @@ void ewkm(// Inputs ----------------------------------------------------------
 	  double *lambda, 	// Learning rate
 	  int *maxiter, 	// Maximum number of iterations
 	  double *delta, 	// Minimum change below which iteration stops
+	  int *maxrestart,      // Maximum number of restarts
 	  // Outputs ---------------------------------------------------------
 	  int *iterations,	// Number of iterations
 	  int *cluster, 	// Cluster assignment for each obs (nr)
 	  double *centers, 	// Cluster centers (k*nc)
-	  double *weights) 	// Variable weights (k*nc)
+	  double *weights, 	// Variable weights (k*nc)
+	  int *restarts,	// Number of restarts
+	  int *totiters)	// Number of iterations including restarts
 {
-  int i, j, l;
+  int i, j, l, full;
 
   int iteration; // Count of iterations.
 
@@ -330,7 +342,7 @@ void ewkm(// Inputs ----------------------------------------------------------
       exit(1);
     }
   }
-  
+
   // -- partition matrix --
 
   partition = (int *) malloc(*nr * sizeof(int));
@@ -340,59 +352,92 @@ void ewkm(// Inputs ----------------------------------------------------------
     printf("Can't allocate memory for partition matrix\n");
     exit(1);
   }
-  
+
   // -- subspace_weights array --
 
   subspace_weights = (double **) malloc(*k * sizeof(double*));
-
+  
   if (!subspace_weights) 
   {
     printf("Can't allocate memory for subspace_weights matrix\n");
     exit(1);
   }
-  
+
   for (l = 0; l < *k; l++) 
   {
     subspace_weights[l] = (double *) malloc(*nc * sizeof(double));
-
+    
     if (!subspace_weights[l]) 
     {
       printf("Can't allocate memory for subspace_weights matrix\n");
       exit(1);
     }
   }
-  
-  // Initialize the prototypes
+
+  // Read in (or create) .Random.seed, the R random number data, and
+  // then initialise the random sequence.
+
+  GetRNGstate();
+
+  // Initialise a rand sequence.
+
+  srand(unif_rand() * RAND_MAX);
+
+  // Initialize the prototypes.
 
   initPrototypes(x, nr, nc, k, o_prototype);
-  
+
   // Initialize the feature weights of a cluster.
 
-  for (l = 0; l < *k; l++)
+  for (l = 0; l < *k; l++) 
     for (j = 0; j < *nc; j++)
       subspace_weights[l][j] = 1.0 / *nc;
   
   // Now cluster
 
   iteration = 0;
+  *totiters = 0;
+  *restarts = 0;
 
   while (++iteration <= *maxiter) 
   {
-    
     dispersion = dispersion1;
     
     updPartition(x, nr, nc, k, o_prototype, subspace_weights, partition);
+
+    // Check if any prototypes are empty, and if so we have to
+    // initiate a new search if we have restarts left
     
-    updPrototypes(x, nr, nc, k, partition, o_prototype);
-    
+    full = updPrototypes(x, nr, nc, k, partition, o_prototype); 
+
+    if (! full  && *maxrestart != 0)
+    {
+      *restarts += 1;
+      *maxrestart -= 1;
+      *totiters += iteration;
+      // printf("Restarted %d times for %d iterations.\n", *restarts, *totiters);
+      iteration = 0;
+  
+      // Initialize the prototypes
+
+      initPrototypes(x, nr, nc, k, o_prototype);
+  
+      // Initialize the feature weights of a cluster.
+
+      for (l = 0; l < *k; l++)
+	for (j = 0; j < *nc; j++)
+	  subspace_weights[l][j] = 1.0 / *nc;
+    }
+
     // Update weights of attibutes of each cluster
 
-    updWeights(x, nr, nc, k, lambda, partition, o_prototype, subspace_weights);
+    updWeights(x, nr, nc, k, lambda, partition, o_prototype,
+	       subspace_weights);
     
     // Compute objective function value
 
-    dispersion1 = calcCost(x, nr, nc, k, lambda, 
-			  partition, o_prototype, subspace_weights);
+    dispersion1 = calcCost(x, nr, nc, k, lambda, partition, o_prototype,
+			   subspace_weights);
     
     // Check for convergence
 
@@ -425,5 +470,14 @@ void ewkm(// Inputs ----------------------------------------------------------
   free(o_prototype);
   free(subspace_weights);
   
+  *totiters += iteration;
+  // If we have reaced the maximum iterations, the count was already
+  // increased.
+  if (iteration == *maxiter + 1) *totiters = *totiters - 1;
+
+  // Write out the R random number data.
+
+  PutRNGstate();
+
 }
 

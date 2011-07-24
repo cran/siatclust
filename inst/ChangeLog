@@ -1,0 +1,34 @@
+siatclust (1.0.2) unstable; urgency=low
+
+  * Simplify directory structure for the package.
+  
+  * Introduce maxrestart to control the number of restarts when there are
+    fewer clusters than requested.
+  
+  * Remove empty clusters from the returned clustering, as might happen
+    when fewer than the requested clusters were found and the maximum
+    iteration and maximum number of restarts were reached.
+  
+  * Add tests for automated testing.
+
+ -- Graham Williams <Graham.Williams@togaware.com>  Sat, 23 Jul 2011 21:30:38 +1000
+
+siatclust (1.0.1) unstable; urgency=low
+
+  * Add some basic testing to the package: make tests.
+  
+  * Random seed functionality working in harmony with R. Thus set.seed in
+    R will ensure the same model is built.
+  
+  * Previous version could return emtpy clusters. This version will
+    restart the algorithm when empty clusters are encountered. The number
+    of restarts is returned along with the total number of iterations.
+
+ -- Graham Williams <Graham.Williams@togaware.com>  Sun, 17 Jul 2011 13:06:36 +1000
+
+siatclust (1.0.0) unstable; urgency=low
+
+  * Initial Release.
+  
+-- Graham Williams <Graham.Williams@togaware.com>  Sun, 3 Jul 2011 13:06:36 +1000
+
