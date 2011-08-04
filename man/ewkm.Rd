@@ -113,13 +113,14 @@
 }
 \examples{
 
-x <- as.matrix(iris[1:4])
-myewkm <- ewkm(x, k=3, lambda=0.5, maxiter=100)
+myewkm <- ewkm(iris[1:4], k=3, lambda=0.5, maxiter=100)
 
-plot(as.data.frame(x), col=myewkm$cluster)
+plot(iris[1:4], col=myewkm$cluster)
 
 # For comparative testing
 
-mykm <- kmeans(x, 3)
+mykm <- kmeans(iris[1:4], 3)
+
+plot(iris[1:4], col=mykm$cluster)
 
 }

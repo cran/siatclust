@@ -1,3 +1,9 @@
+siatclust (1.0.3) unstable; urgency=low
+
+  * Add a generic plot to show a heatmap of the weights.
+
+ -- Graham Williams <Graham.Williams@togaware.com>  Thu, 04 Aug 2011 19:54:47 +1000
+
 siatclust (1.0.2) unstable; urgency=low
 
   * Simplify directory structure for the package.

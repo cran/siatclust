@@ -1,3 +1,4 @@
 useDynLib("siatclust")
 
 export("ewkm")
+S3method(plot, ewkm)
