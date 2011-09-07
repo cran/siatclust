@@ -76,10 +76,10 @@
 }
 \value{
   
-  Returns an object of class "kmeans", compatible with other functions
-  that work with kmeans objects, such as the 'print' method. The object
-  is a list with the following components in addition to the components
-  of the kmeans object:
+  Returns an object of class "kmeans" and "ewkm", compatible with other
+  functions that work with kmeans objects, such as the 'print'
+  method. The object is a list with the following components in addition
+  to the components of the kmeans object:
 
   weights: A matrix of weights recording the relative importance of each
   variable for each cluster.
@@ -110,6 +110,11 @@
 
   Qiang Wang, Xiaojun Chen, Graham J Williams, Joshua Z Huang
   
+}
+\seealso{
+
+  \code{\link{plot.ewkm}}.
+
 }
 \examples{
 

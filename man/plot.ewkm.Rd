@@ -1,5 +1,6 @@
 \name{plot.ewkm}
 \alias{plot.ewkm}
+\alias{levelplot.ewkm}
 \title{
   
   Plot Entropy Weighted K-Means Weights
@@ -12,18 +13,15 @@
 }
 \usage{
 
-\method{plot}{ewkm}(x, type="lattice", ...)
+\method{plot}{ewkm}(x, ...)
+\method{levelplot}{ewkm}(x, ...)
 
 }
 \arguments{
 
   \item{x}{an object of class ewkm.}
 
-  \item{type}{can be "lattice" or "standard". The "standard" choice uses
-    heatmap() to display the weights whilst "lattice" uses levelplot()
-    with dendrgramGlobs from the lattice package.}
-  
-  \item{...}{ignored.}
+  \item{...}{arguments passed on through to heatmap.}
 
 }
 \details{
@@ -38,6 +36,12 @@
   highlights the relationship between the clusters and the right side
   dendrogram provides a visual clue to the correlation between the variables.
 
+  The plot.ewkm() function uses heatmap() to display the weights. The
+  levelplot.ewkm() uses levelplot() with dendrogramGlobs from the
+  lattice package. Note that plot() will immediately draw the plot while
+  levelplot() does not draw immediately but returns a result object
+  which must be plot()ed.
+  
 }
 \author{
 

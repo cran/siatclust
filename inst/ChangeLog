@@ -1,3 +1,19 @@
+siatclust (1.0.4) unstable; urgency=low
+
+  * Support both plot.ewkm() and levelplot.ewkm().
+  
+  * Both plot functions accept additional arguments that are passed
+    through to the underlying plotters.
+  
+  * Note in ewkm.Rd that the class of the returned object is "ewkm" as
+    well as "kmeans".
+  
+  * Add a "see also" to the man page for ewkm.
+  
+  * Changes suggested by Felix Andrews.
+
+ --
+
 siatclust (1.0.3) unstable; urgency=low
 
   * Add a generic plot to show a heatmap of the weights.

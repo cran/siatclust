@@ -1,4 +1,5 @@
 useDynLib("siatclust")
-
+import("lattice")
 export("ewkm")
 S3method(plot, ewkm)
+S3method(levelplot, ewkm)

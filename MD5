@@ -1,0 +1,12 @@
+92cf02a704f34d5838efea1e48b71d20 *DESCRIPTION
+d32239bcb673463ab874e80d47fae504 *LICENSE
+135f952b9fbaa9338cb83be5bcf604ce *NAMESPACE
+8d93cb2073e14d54aaf1473b19ebb7de *R/ewkm.R
+df99565e6d07d2ec52c01b55d8a22ef4 *inst/ChangeLog
+78a389d098c5e99fe6007c7778cb1b62 *man/ewkm.Rd
+83de46298e4ed356f8d74c3c9f769149 *man/plot.ewkm.Rd
+581c002f90da64dc39506bfcd9b99463 *src/ewkm.c
+945715407f73e655a81f6b34d91fbb5e *tests/Makefile
+e87ccb98799cb78c285060bc62db12f9 *tests/ewkm01.R
+aef281ecd4aa46858f295443321194f6 *tests/ewkm01.Rout.save
+66d5b67d8a203ef6c9bbff5ab507af2e *tests/ewkm01.csv

@@ -75,30 +75,21 @@ ewkm <- function(x, k, lambda=1, maxiter=100, delta=0.00001, maxrestart=10)
 #  return(Z)
 }
 
-plot.ewkm <- function(x, type="lattice", ...)
-{
-  if (type == "standard")
-    plot.ewkm.standard(x)
-  else
-    plot.ewkm.lattice(x)
-}
-
-
-plot.ewkm.standard <- function(x)
+plot.ewkm <- function(x, ...)
 {
   x  <- t(x$weights)
   rc <- rainbow(nrow(x), start=0, end=.3)
   cc <- rainbow(ncol(x), start=0, end=.3)
   hv <- heatmap(x, col = cm.colors(256), scale="column",
                 RowSideColors = rc, ColSideColors = cc, margin=c(5,10),
-                xlab = "Cluster")
+                xlab = "Cluster", ...)
 }
 
-plot.ewkm.lattice <- function(x)
+levelplot.ewkm <- function(x, ...)
 {
   require(lattice)
   require(latticeExtra)
- 
+
   x  <- x$weights
   dd.row <- as.dendrogram(hclust(dist(x)))
   row.ord <- order.dendrogram(dd.row)
@@ -124,6 +115,7 @@ plot.ewkm.lattice <- function(x)
                  list(fun = dendrogramGrob,
                       args =
                       list(x = dd.row, 
-                           side = "top"))))
+                           side = "top"))),
+            ...)
 }
 
