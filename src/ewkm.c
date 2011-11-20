@@ -54,8 +54,7 @@ void initPrototypes(// Inputs ---------------------------------------------
   random_obj_num = (int *) malloc(sizeof(int) * (*k));
   if (!random_obj_num) 
   {
-    printf("Can't allocate memory for random_obj_num matrix\n");
-    exit(1);
+    error("Can't allocate memory for random_obj_num matrix\n");
   }
 
   for (l = 0; l < *k; l++) random_obj_num[l] = -1;
@@ -251,16 +250,14 @@ void updWeights(// Inputs ------------------------------------------------------
   DJ = (float **) malloc(*k * sizeof(float*));
   if (!DJ) 
   {
-    printf("Can't allocate memory for DJ\n");
-    exit(1);
+    error("Can't allocate memory for DJ\n");
   }
   for (l = 0; l < *k; l++) 
   {
     DJ[l] = (float *) malloc((*nc) * sizeof(float));
     if (!DJ[l]) 
     {
-      printf("Can't allocate memory for o_prototype DJ\n");
-      exit(1);
+      error("Can't allocate memory for o_prototype DJ\n");
     }
 
     for (j = 0; j < *nc; j++) 
@@ -329,8 +326,7 @@ void ewkm(// Inputs ----------------------------------------------------------
   
   if (!o_prototype) 
   {
-    printf("Can't allocate memory for o_prototype matrix\n");
-    exit(1);
+    error("Can't allocate memory for o_prototype matrix\n");
   }
   
   for (l = 0; l < *k; l++) 
@@ -338,8 +334,7 @@ void ewkm(// Inputs ----------------------------------------------------------
     o_prototype[l] = (double *) malloc(*nc * sizeof(double));
     if (!o_prototype[l]) 
     {
-      printf("Can't allocate memory for o_prototype matrix\n");
-      exit(1);
+      error("Can't allocate memory for o_prototype matrix\n");
     }
   }
 
@@ -349,8 +344,7 @@ void ewkm(// Inputs ----------------------------------------------------------
 
   if (!partition) 
   {
-    printf("Can't allocate memory for partition matrix\n");
-    exit(1);
+    error("Can't allocate memory for partition matrix\n");
   }
 
   // -- subspace_weights array --
@@ -359,8 +353,7 @@ void ewkm(// Inputs ----------------------------------------------------------
   
   if (!subspace_weights) 
   {
-    printf("Can't allocate memory for subspace_weights matrix\n");
-    exit(1);
+    error("Can't allocate memory for subspace_weights matrix\n");
   }
 
   for (l = 0; l < *k; l++) 
@@ -369,8 +362,7 @@ void ewkm(// Inputs ----------------------------------------------------------
     
     if (!subspace_weights[l]) 
     {
-      printf("Can't allocate memory for subspace_weights matrix\n");
-      exit(1);
+      error("Can't allocate memory for subspace_weights matrix\n");
     }
   }
 
@@ -415,7 +407,6 @@ void ewkm(// Inputs ----------------------------------------------------------
       *restarts += 1;
       *maxrestart -= 1;
       *totiters += iteration;
-      // printf("Restarted %d times for %d iterations.\n", *restarts, *totiters);
       iteration = 0;
   
       // Initialize the prototypes

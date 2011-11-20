@@ -1,3 +1,9 @@
+siatclust (1.0.5) unstable; urgency=low
+
+  * Add new algorithm fgkm() and sample dataset fgkm.sample.
+
+ -- Graham Williams <Graham.Williams@togaware.com>  Wed, 16 Nov 2011 18:39:53 +1100
+
 siatclust (1.0.4) unstable; urgency=low
 
   * Support both plot.ewkm() and levelplot.ewkm().
@@ -12,7 +18,7 @@ siatclust (1.0.4) unstable; urgency=low
   
   * Changes suggested by Felix Andrews.
 
- --
+ -- Graham Williams <Graham.Williams@togaware.com>  Thu, 08 Sep 2011 06:29:47 +1000
 
 siatclust (1.0.3) unstable; urgency=low
 
